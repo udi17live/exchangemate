@@ -9,7 +9,7 @@ void main() {
     ChangeNotifierProvider(
       create: (context) => ThemeProvider(),
       child: const ExchangeMate(),
-    );
+    ),
   );
 }
 
@@ -23,7 +23,7 @@ class ExchangeMate extends StatelessWidget {
       title: 'exchangemate.',
       debugShowCheckedModeBanner: false,
       theme: Provider.of<ThemeProvider>(context).themeData,
-      home: const ExchangeScreen(),
+      home: ExchangeScreen(),
     );
   }
 }

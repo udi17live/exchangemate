@@ -1,32 +1,36 @@
 import "package:flutter/material.dart";
+import 'package:google_fonts/google_fonts.dart';
 
-Color LIGHT_BACKGROUND_COLOR = Colors.white;
-Color DARK_BACKGROUND_COLOR = Colors.grey.shade900;
+Color lightBackgroundColor = Colors.white;
+Color darkBackgroundColor = Colors.grey.shade900;
+TextTheme defaultTextTheme = GoogleFonts.outfitTextTheme();
 
 ThemeData lightMode = ThemeData(
   useMaterial3: true,
   brightness: Brightness.light,
   colorScheme: ColorScheme.light(
-    background: LIGHT_BACKGROUND_COLOR,
+    background: lightBackgroundColor,
     primary: Colors.black,
     secondary: Colors.black54,
   ),
-  scaffoldBackgroundColor: LIGHT_BACKGROUND_COLOR,
+  scaffoldBackgroundColor: lightBackgroundColor,
   appBarTheme: AppBarTheme(
-    backgroundColor: LIGHT_BACKGROUND_COLOR,
+    backgroundColor: lightBackgroundColor,
   ),
+  textTheme: defaultTextTheme,
 );
 
 ThemeData darkMode = ThemeData(
   useMaterial3: true,
   brightness: Brightness.dark,
   colorScheme: ColorScheme.dark(
-    background: DARK_BACKGROUND_COLOR,
+    background: darkBackgroundColor,
     primary: Colors.white,
     secondary: Colors.white54,
   ),
-  scaffoldBackgroundColor: DARK_BACKGROUND_COLOR,
+  scaffoldBackgroundColor: darkBackgroundColor,
   appBarTheme: AppBarTheme(
-    backgroundColor: DARK_BACKGROUND_COLOR,
+    backgroundColor: darkBackgroundColor,
   ),
+  textTheme: defaultTextTheme,
 );
