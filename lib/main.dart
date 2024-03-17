@@ -1,16 +1,11 @@
+import 'package:exchangemate/constants/constants.dart';
 import 'package:exchangemate/pages/ExchangeScreen.dart';
-import 'package:exchangemate/theme/Theme.dart';
-import 'package:exchangemate/theme/ThemeProvider.dart';
+import 'package:exchangemate/providers/ThemeProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(
-    ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
-      child: const ExchangeMate(),
-    ),
-  );
+  runApp(ExchangeMate());
 }
 
 class ExchangeMate extends StatelessWidget {
@@ -19,11 +14,17 @@ class ExchangeMate extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'exchangemate.',
-      debugShowCheckedModeBanner: false,
-      theme: Provider.of<ThemeProvider>(context).themeData,
-      home: ExchangeScreen(),
+    return ChangeNotifierProvider<ThemeProvider>(
+      create: (_) => ThemeProvider(),
+      child: Consumer<ThemeProvider>(
+          builder: (context, value, child) => MaterialApp(
+                title: 'exchangemate.',
+                debugShowCheckedModeBanner: false,
+                themeMode: value.themeMode,
+                theme: light,
+                darkTheme: dark,
+                home: ExchangeScreen(),
+              )),
     );
   }
 }
