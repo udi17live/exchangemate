@@ -1,6 +1,10 @@
+import 'package:exchangemate/widgets/CurrencyPickerButton.dart';
 import 'package:exchangemate/widgets/EMAppBar.dart';
+import 'package:exchangemate/widgets/Logo.dart';
 import 'package:flutter/material.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:heroicons/heroicons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:currency_picker/currency_picker.dart';
 
 class ExchangeScreen extends StatefulWidget {
   const ExchangeScreen({super.key});
@@ -10,109 +14,102 @@ class ExchangeScreen extends StatefulWidget {
 }
 
 class _ExchangeScreenState extends State<ExchangeScreen> {
-  final List<String> items = [
-    'A_Item1',
-    'A_Item2',
-    'A_Item3',
-    'A_Item4',
-    'B_Item1',
-    'B_Item2',
-    'B_Item3',
-    'B_Item4',
-  ];
+  String? defaultCurrency = null;
+  String? defaultCurrencyName = null;
 
-  String? selectedValue;
-  final TextEditingController textEditingController = TextEditingController();
+  String? fromCurrencyCode = null;
+  String? fromCurrencyName = null;
+  String? toCurrencyCode = null;
+  String? toCurrencyName = null;
+
+  void setDefaultCurrency(Currency currency) {
+    setState(() {
+      defaultCurrency = currency.code;
+      defaultCurrencyName = currency.name;
+    });
+  }
+
+  void setFromCurrencyData(String? currencyCode, String? currencyName) {
+    setState(() {
+      // print(currencyCode);
+      // print(currencyName);
+      fromCurrencyCode = currencyCode;
+      fromCurrencyName = currencyName;
+      // print(fromCurrencyCode);
+      // print(fromCurrencyName);
+    });
+  }
+
+  void setToCurrencyData(String? currencyCode, String? currencyName) {
+    setState(() {
+      toCurrencyCode = currencyCode;
+      toCurrencyName = currencyName;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    Future<SharedPreferences> getPreferences() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      return prefs;
+    }
+
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: EMAppBar(),
-      body: Center(
-        child: Column(
-          children: [
-            DropdownButtonHideUnderline(
-              child: DropdownButton2<String>(
-                isExpanded: true,
-                hint: Text(
-                  'Select Item',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Theme.of(context).hintColor,
+      body: FutureBuilder(
+        future: getPreferences(),
+        builder:
+            (BuildContext context, AsyncSnapshot<SharedPreferences> snapshot) {
+          if (snapshot.hasData) {
+            SharedPreferences? _sharedPreferences = snapshot.data;
+            fromCurrencyCode =
+                _sharedPreferences?.getString("defaultCurrencyCode");
+            fromCurrencyName =
+                _sharedPreferences?.getString("defaultCurrencyName");
+
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 28.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "FROM:",
+                    style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: colorScheme.primary),
                   ),
-                ),
-                items: items
-                    .map((item) => DropdownMenuItem(
-                          value: item,
-                          child: Text(
-                            item,
-                            style: const TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ))
-                    .toList(),
-                value: selectedValue,
-                onChanged: (value) {
-                  setState(() {
-                    selectedValue = value;
-                  });
-                },
-                buttonStyleData: const ButtonStyleData(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  height: 40,
-                  width: 400,
-                ),
-                dropdownStyleData: const DropdownStyleData(
-                  maxHeight: 200,
-                ),
-                menuItemStyleData: const MenuItemStyleData(
-                  height: 40,
-                ),
-                dropdownSearchData: DropdownSearchData(
-                  searchController: textEditingController,
-                  searchInnerWidgetHeight: 50,
-                  searchInnerWidget: Container(
-                    height: 50,
-                    padding: const EdgeInsets.only(
-                      top: 8,
-                      bottom: 4,
-                      right: 8,
-                      left: 8,
-                    ),
-                    child: TextFormField(
-                      expands: true,
-                      maxLines: null,
-                      controller: textEditingController,
-                      decoration: InputDecoration(
-                        isDense: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 8,
-                        ),
-                        hintText: 'Search for an item...',
-                        hintStyle: const TextStyle(fontSize: 12),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
+                  SizedBox(height: 5.0),
+                  CurrencyPickerButton(
+                    currencyCode: fromCurrencyCode,
+                    currencyName: fromCurrencyName,
+                    setCurrencyData: setFromCurrencyData,
                   ),
-                  searchMatchFn: (item, searchValue) {
-                    String item_value = item.value.toString().toLowerCase();
-                    return item_value.contains(searchValue.toLowerCase());
-                  },
-                ),
-                //This to clear the search value when you close the menu
-                onMenuStateChange: (isOpen) {
-                  if (!isOpen) {
-                    textEditingController.clear();
-                  }
-                },
+                  SizedBox(height: 30.0),
+                  Text(
+                    "TO:",
+                    style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: colorScheme.primary),
+                  ),
+                  SizedBox(height: 5.0),
+                  CurrencyPickerButton(
+                    currencyCode: toCurrencyCode,
+                    currencyName: toCurrencyName,
+                    setCurrencyData: setToCurrencyData,
+                  ),
+                ],
               ),
-            )
-          ],
-        ),
+            );
+          } else {
+            return CircularProgressIndicator();
+          }
+        },
       ),
     );
   }

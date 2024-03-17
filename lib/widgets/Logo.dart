@@ -1,22 +1,32 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
 class Logo extends StatelessWidget {
-  const Logo({super.key});
+  final double? fontSize;
+  const Logo({super.key, this.fontSize = 32.0});
 
   @override
   Widget build(BuildContext context) {
-    const defaultTextSize = 32.0;
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
 
-    return const Row(
+    return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Text(
           "exchange",
-          style: TextStyle(fontSize: defaultTextSize),
+          style: TextStyle(
+            fontSize: fontSize,
+            color: colorScheme.primary,
+          ),
         ),
         Text(
           "mate.",
-          style:
-              TextStyle(fontWeight: FontWeight.bold, fontSize: defaultTextSize),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: fontSize,
+            color: colorScheme.primary,
+          ),
         ),
       ],
     );

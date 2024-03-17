@@ -1,5 +1,6 @@
 import 'package:exchangemate/constants/constants.dart';
 import 'package:exchangemate/pages/ExchangeScreen.dart';
+import 'package:exchangemate/pages/onboarding/OnboardingPage.dart';
 import 'package:exchangemate/providers/ThemeProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +24,7 @@ class ExchangeMate extends StatelessWidget {
                 themeMode: value.themeMode,
                 theme: light,
                 darkTheme: dark,
-                home: ExchangeScreen(),
+                home: OnboardingPage(),
               )),
     );
   }

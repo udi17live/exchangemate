@@ -37,9 +37,11 @@ dependencies:
   cupertino_icons: ^1.0.2
   provider: ^6.1.2
   shared_preferences: ^2.2.2
-  google_fonts:
+  google_fonts: 6.1.0
   heroicons:
   dropdown_button2: ^2.3.9
+  currency_picker: ^2.0.21
+  currency_icons: ^0.3.0
 
 dev_dependencies:
   flutter_test:
